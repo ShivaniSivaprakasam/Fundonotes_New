@@ -4,6 +4,7 @@ import com.fundoonotes.fundoonotes.dto.NoteDTO;
 import com.fundoonotes.fundoonotes.entity.Note;
 import com.fundoonotes.fundoonotes.repository.NoteRepository;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class NoteService {
@@ -20,5 +21,8 @@ public class NoteService {
         note.setDescription(dto.getDescription());
 
         return noteRepository.save(note);
+    }
+    public List<Note> getAllNotes() {
+        return noteRepository.findAll();
     }
 }
