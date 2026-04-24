@@ -35,4 +35,13 @@ public class NoteService {
 
         return noteRepository.save(note);
     }
+    public String deleteNote(Long id) {
+
+        Note note = noteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Note not found"));
+
+        noteRepository.delete(note);
+
+        return "Note deleted successfully";
+    }
 }

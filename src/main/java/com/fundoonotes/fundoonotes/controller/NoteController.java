@@ -28,4 +28,8 @@ public class NoteController {
     public Note updateNote(@PathVariable Long id, @RequestBody NoteDTO dto) {
         return noteService.updateNote(id, dto);
     }
+    @DeleteMapping("/{id}")
+    public String deleteNote(@PathVariable Long id) {
+        return noteService.deleteNote(id);
+    }
 }
