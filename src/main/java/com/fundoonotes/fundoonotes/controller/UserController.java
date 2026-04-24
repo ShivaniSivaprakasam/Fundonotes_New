@@ -29,7 +29,7 @@ public class UserController {
     // ✅ LOGIN API (UC5)
     // ==============================
     @PostMapping("/login")
-    public User login(@RequestBody LoginDTO dto) {
+    public String login(@RequestBody LoginDTO dto) {
         return userService.login(dto);
     }
 }

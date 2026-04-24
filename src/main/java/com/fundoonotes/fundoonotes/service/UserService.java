@@ -4,6 +4,8 @@ import com.fundoonotes.fundoonotes.dto.LoginDTO;
 import com.fundoonotes.fundoonotes.dto.UserDTO;
 import com.fundoonotes.fundoonotes.entity.User;
 import com.fundoonotes.fundoonotes.repository.UserRepository;
+import com.fundoonotes.fundoonotes.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,21 +25,23 @@ public class UserService {
 
         return userRepository.save(user);
     }
-    public User login(LoginDTO dto) {
+    @Autowired
+    private JwtUtil jwtUtil;
 
-        // Find user by email
+    public String login(LoginDTO dto) {
+
         User user = userRepository.findByEmail(dto.getEmail());
 
-        // If user not found
         if (user == null) {
             throw new RuntimeException("User not found");
         }
 
-        // Check password
         if (!user.getPassword().equals(dto.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
 
-        return user;
+        // Return JWT instead of user
+        return jwtUtil.generateToken(user.getEmail());
     }
+
 }
