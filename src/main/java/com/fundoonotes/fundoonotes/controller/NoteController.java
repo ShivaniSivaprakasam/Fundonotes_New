@@ -24,4 +24,8 @@ public class NoteController {
     public List<Note> getAllNotes() {
         return noteService.getAllNotes();
     }
+    @PutMapping("/{id}")
+    public Note updateNote(@PathVariable Long id, @RequestBody NoteDTO dto) {
+        return noteService.updateNote(id, dto);
+    }
 }

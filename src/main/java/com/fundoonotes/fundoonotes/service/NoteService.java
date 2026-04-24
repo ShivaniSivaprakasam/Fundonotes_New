@@ -25,4 +25,14 @@ public class NoteService {
     public List<Note> getAllNotes() {
         return noteRepository.findAll();
     }
+    public Note updateNote(Long id, NoteDTO dto) {
+
+        Note note = noteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Note not found"));
+
+        note.setTitle(dto.getTitle());
+        note.setDescription(dto.getDescription());
+
+        return noteRepository.save(note);
+    }
 }
