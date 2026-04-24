@@ -6,15 +6,19 @@ import com.fundoonotes.fundoonotes.entity.User;
 import com.fundoonotes.fundoonotes.repository.UserRepository;
 import com.fundoonotes.fundoonotes.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User register(UserDTO dto) {
@@ -22,6 +26,7 @@ public class UserService {
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         return userRepository.save(user);
     }
@@ -36,11 +41,10 @@ public class UserService {
             throw new RuntimeException("User not found");
         }
 
-        if (!user.getPassword().equals(dto.getPassword())) {
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
 
-        // Return JWT instead of user
         return jwtUtil.generateToken(user.getEmail());
     }
 
